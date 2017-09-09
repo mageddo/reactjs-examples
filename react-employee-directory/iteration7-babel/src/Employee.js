@@ -1,11 +1,13 @@
 import React from 'react';
 import {Header} from './Template';
+import Router from './Router';
 
 export class EmployeeListItem extends React.Component {
+
     render() {
         return (
-            <li className="table-view-cell media">
-                <a href={"#employees/" + this.props.employee.id}>
+            <li className="table-view-cell media" >
+                <a href={"/employees/" + this.props.employee.id} onClick={Router.loadPage}>
                     <img className="media-object small pull-left" src={"pics/" + this.props.employee.firstName + "_" + this.props.employee.lastName + ".jpg" }/>
                     {this.props.employee.firstName} {this.props.employee.lastName}
                     <p>{this.props.employee.title}</p>
@@ -50,7 +52,7 @@ export class EmployeePage extends React.Component{
                 <div className="card">
                     <ul className="table-view">
                         <li className="table-view-cell media">
-                            <img className="media-object big pull-left" src={"pics/" + this.state.employee.firstName + "_" + this.state.employee.lastName + ".jpg" }/>
+                            <img className="media-object big pull-left" src={"/pics/" + this.state.employee.firstName + "_" + this.state.employee.lastName + ".jpg" }/>
                             <h1>{this.state.employee.firstName} {this.state.employee.lastName}</h1>
                             <p>{this.state.employee.title}</p>
                         </li>

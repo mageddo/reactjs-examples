@@ -1,14 +1,15 @@
 export default class Router {
 
+    static instance;
+
     constructor(){
         console.debug('m=router');
         this.routes = [];
-        window.onhashchange = this.start.bind(this);
     }
 
     addRoute(route, handler) {
         console.debug('m=addRoute, route=%s', route)
-        this.routes.push({parts: route.split('/'), handler: handler});
+        this.routes.push({path: route, parts: route.split('/'), handler: handler});
     }
 
     load(route) {
@@ -16,30 +17,49 @@ export default class Router {
         window.location.hash = route;
     }
 
-    start() {
+    static loadPage(e) {
+        console.log('The link was clicked. %o', e.currentTarget, e.currentTarget.getAttribute('href'));
+        e.preventDefault();
+        Router.getInstance().start(e.currentTarget.getAttribute('href'))
+    }
 
-        console.debug('m=start, routes=%o', this.routes)
-        var path = window.location.hash.substr(1),
-            parts = path.split('/'),
-            partsLength = parts.length;
+    start(path) {
 
-        for (var i = 0; i < this.routes.length; i++) {
-            var route = this.routes[i];
-            if (route.parts.length === partsLength) {
-                var params = [];
-                for (var j = 0; j < partsLength; j++) {
-                    if (route.parts[j].substr(0, 1) === ':') {
-                        params.push(parts[j]);
-                    } else if (route.parts[j] !== parts[j]) {
-                        break;
-                    }
-                }
-                if (j === partsLength) {
-                    route.handler.apply(undefined, params);
-                    return;
-                }
-            }
+        if(!path){
+            path = document.location.pathname
         }
+        console.debug('m=start, routes=%o, path=%s', this.routes, path)
+
+        var filteredRoute = this.routes.filter(r => Router.getRegex(r.path).test(path))
+        if (filteredRoute.length == 0) {
+            return
+        }
+        console.debug('m=start, filteredRoute=%o', filteredRoute);
+
+        var route = filteredRoute[0];
+        var params = this.getMatches(Router.getRegex(route.path), path);
+        console.debug('m=start, params=%o', params);
+        route.handler.apply(undefined, params);
+        window.history.pushState({}, "title 1", path);
+    }
+
+    static getRegex(exp){
+        return RegExp("^" + exp + "$", "g")
+    }
+
+    static getInstance(){
+        if (!Router.instance){
+            Router.instance = new Router
+        }
+        return Router.instance
+    }
+
+    getMatches(regex, str){
+        var r;
+        while(r = regex.exec(str)){
+            return r.slice(1);
+        }
+        return null;
     }
 
 }

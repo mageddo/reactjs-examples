@@ -10,7 +10,6 @@ class App extends React.Component{
 
     constructor() {
         super()
-        this.router = new Router
         this.employeeService = new EmployeeService
         this.state = {
             searchKey: '',
@@ -26,15 +25,15 @@ class App extends React.Component{
     }
 
     componentDidMount() {
-        this.router.addRoute('', function() {
+        Router.getInstance().addRoute('/', function() {
             console.debug("m=home")
             this.setState({page: <HomePage searchKey={this.state.searchKey} searchHandler={this.searchHandler.bind(this)} employees={this.state.employees}/>});
         }.bind(this));
-        this.router.addRoute('employees/:id', function(id) {
+        Router.getInstance().addRoute('/employees/(\\d+)', function(id) {
             console.debug('load employee', id)
             this.setState({page: <EmployeePage employeeId={id} service={this.employeeService}/>});
         }.bind(this));
-        this.router.start();
+        Router.getInstance().start();
     }
 
     render() {

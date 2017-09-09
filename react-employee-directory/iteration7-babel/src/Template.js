@@ -1,5 +1,6 @@
 import React from 'react';
 import {EmployeeList} from './Employee';
+import Router from './Router';
 
 export class SearchBar extends React.Component {
 
@@ -25,7 +26,7 @@ export class Header extends React.Component {
     render() {
         return (
             <header className="bar bar-nav">
-                <a href="#" className={"icon icon-left-nav pull-left" + (this.props.back==="true"?"":" hidden")}></a>
+                <a href="/" onClick={Router.loadPage} className={"icon icon-left-nav pull-left" + (this.props.back==="true"?"":" hidden")}></a>
                 <h1 className="title">{this.props.text}</h1>
             </header>
         );
