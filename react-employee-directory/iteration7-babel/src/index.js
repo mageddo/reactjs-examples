@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import EmployeeService from './EmployeeService';
+import './css/styles.css';
 
 class Router {
 
     constructor(){
+        console.debug('start');
         this.routes = [];
-        window.onhashchange = this.start;
+        var that = this.start.bind(this);
+        window.onhashchange = function(){console.debug('start now');that()};
     }
 
     addRoute(route, handler) {
@@ -19,6 +22,7 @@ class Router {
 
     start() {
 
+        console.debug('m=start, routes=%j', this.routes)
         var path = window.location.hash.substr(1),
             parts = path.split('/'),
             partsLength = parts.length;
@@ -118,6 +122,73 @@ class HomePage extends React.Component {
     }
 };
 
+class EmployeePage extends React.Component{
+
+    constructor() {
+        super();
+        this.state = {employee: {}};
+    }
+
+    componentDidMount() {
+        this.props.service.findById(this.props.employeeId).done(function(result) {
+            this.setState({employee: result});
+        }.bind(this));
+    }
+
+    render() {
+        return (
+            <div>
+                <Header text="Employee" back="true"/>
+                <div className="card">
+                    <ul className="table-view">
+                        <li className="table-view-cell media">
+                            <img className="media-object big pull-left" src={"pics/" + this.state.employee.firstName + "_" + this.state.employee.lastName + ".jpg" }/>
+                            <h1>{this.state.employee.firstName} {this.state.employee.lastName}</h1>
+                            <p>{this.state.employee.title}</p>
+                        </li>
+                        <li className="table-view-cell media">
+                            <a href={"tel:" + this.state.employee.officePhone} className="push-right">
+                                <span className="media-object pull-left icon icon-call"></span>
+                                <div className="media-body">
+                                Call Office
+                                    <p>{this.state.employee.officePhone}</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li className="table-view-cell media">
+                            <a href={"tel:" + this.state.employee.mobilePhone} className="push-right">
+                                <span className="media-object pull-left icon icon-call"></span>
+                                <div className="media-body">
+                                Call Mobile
+                                    <p>{this.state.employee.mobilePhone}</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li className="table-view-cell media">
+                            <a href={"sms:" + this.state.employee.mobilePhone} className="push-right">
+                                <span className="media-object pull-left icon icon-sms"></span>
+                                <div className="media-body">
+                                SMS
+                                    <p>{this.state.employee.mobilePhone}</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li className="table-view-cell media">
+                            <a href={"mailto:" + this.state.employee.email} className="push-right">
+                                <span className="media-object pull-left icon icon-email"></span>
+                                <div className="media-body">
+                                Email
+                                    <p>{this.state.employee.email}</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        );
+    }
+}
+
 
 class App extends React.Component{
 
@@ -143,7 +214,7 @@ class App extends React.Component{
             this.setState({page: <HomePage searchKey={this.state.searchKey} searchHandler={this.searchHandler.bind(this)} employees={this.state.employees}/>});
         }.bind(this));
         this.router.addRoute('employees/:id', function(id) {
-//            this.setState({page: <EmployeePage employeeId={id} service={employeeService}/>});
+            this.setState({page: <EmployeePage employeeId={id} service={this.employeeService}/>});
         }.bind(this));
         this.router.start();
     }
