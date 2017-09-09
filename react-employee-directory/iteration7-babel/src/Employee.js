@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header} from './Template';
+import { Header, Link } from './Template';
 import Router from './Router';
 
 export class EmployeeListItem extends React.Component {
@@ -7,11 +7,11 @@ export class EmployeeListItem extends React.Component {
     render() {
         return (
             <li className="table-view-cell media" >
-                <a href={"/employees/" + this.props.employee.id} onClick={Router.loadPage}>
+                <Link href={"/employees/" + this.props.employee.id} >
                     <img className="media-object small pull-left" src={"pics/" + this.props.employee.firstName + "_" + this.props.employee.lastName + ".jpg" }/>
                     {this.props.employee.firstName} {this.props.employee.lastName}
                     <p>{this.props.employee.title}</p>
-                </a>
+                </Link>
             </li>
         );
     }

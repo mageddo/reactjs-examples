@@ -26,7 +26,7 @@ export class Header extends React.Component {
     render() {
         return (
             <header className="bar bar-nav">
-                <a href="/" onClick={Router.loadPage} className={"icon icon-left-nav pull-left" + (this.props.back==="true"?"":" hidden")}></a>
+                <Link href="/" className={"icon icon-left-nav pull-left" + (this.props.back==="true"?"":" hidden")}></Link>
                 <h1 className="title">{this.props.text}</h1>
             </header>
         );
@@ -44,5 +44,17 @@ export class HomePage extends React.Component {
                 </div>
             </div>
         );
+    }
+}
+
+export class Link extends React.Component {
+
+    constructor(props){
+        super()
+        this.props = props;
+    }
+
+    render(){
+        return <a onClick={Router.loadPage} {...this.props}>{this.props.children}</a>
     }
 }
