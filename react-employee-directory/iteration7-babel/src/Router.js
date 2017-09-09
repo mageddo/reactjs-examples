@@ -20,10 +20,10 @@ export default class Router {
     static loadPage(e) {
         console.log('The link was clicked. %o', e.currentTarget, e.currentTarget.getAttribute('href'));
         e.preventDefault();
-        Router.getInstance().start(e.currentTarget.getAttribute('href'))
+        Router.getInstance().start(e.currentTarget.getAttribute('href'), e.currentTarget.getAttribute('title'))
     }
 
-    start(path) {
+    start(path, title) {
 
         if(!path){
             path = document.location.pathname
@@ -40,7 +40,8 @@ export default class Router {
         var params = this.getMatches(Router.getRegex(route.path), path);
         console.debug('m=start, params=%o', params);
         route.handler.apply(undefined, params);
-        window.history.pushState({}, "title 1", path);
+        console.debug('load', window.History)
+        window.History.pushState({}, title, path);
     }
 
     static getRegex(exp){

@@ -7,7 +7,7 @@ export class EmployeeListItem extends React.Component {
     render() {
         return (
             <li className="table-view-cell media" >
-                <Link href={"/employees/" + this.props.employee.id} >
+                <Link href={"/employees/" + this.props.employee.id} title={this.props.employee.firstName + " Contact"} >
                     <img className="media-object small pull-left" src={"pics/" + this.props.employee.firstName + "_" + this.props.employee.lastName + ".jpg" }/>
                     {this.props.employee.firstName} {this.props.employee.lastName}
                     <p>{this.props.employee.title}</p>

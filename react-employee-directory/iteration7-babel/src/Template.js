@@ -55,6 +55,6 @@ export class Link extends React.Component {
     }
 
     render(){
-        return <a onClick={Router.loadPage} {...this.props}>{this.props.children}</a>
+        return <a data-title={this.props.title} onClick={Router.loadPage} {...this.props}>{this.props.children}</a>
     }
 }
