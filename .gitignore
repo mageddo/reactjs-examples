@@ -1,0 +1,12 @@
+build
+*.iml
+*.gradle
+*.log
+*.orig
+node_modules
+.idea
+.zip
+files/
+cordova-react/www/*
+mi-app-cordova/platforms/browser/www/
+mi-app-cordova/platforms/android/assets
