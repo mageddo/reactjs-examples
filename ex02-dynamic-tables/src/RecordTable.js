@@ -1,6 +1,9 @@
 import React from 'react';
 
+import {RecordTableRow} from './RecordTableRow';
+
 export class RecordTable extends React.Component {
+  
   constructor(props){
     super();
     this.state = {
@@ -8,26 +11,34 @@ export class RecordTable extends React.Component {
     };
     console.info("starting....");
   }
+
   componentDidMount(){
     console.info("mounted");
     let that = this;
+
+    let stocks = [];
+    for(var i=0; i < 1000; i++){
+      stocks.push({
+        stock: 'S-' + i,
+        price: Math.random() * 20
+      });
+    }
+
+    that.setState({
+      stocks: stocks
+    });
+
     setInterval(function(){
-      let stocks = [];
-      for(var i=0; i < 1000; i++){
-        stocks.push({
-          stock: 'S-' + i,
-          price: Math.random() * 20
-        });
+      let howMuchUpdate = parseInt(Math.random() * 999);
+      for(let i=0; i < howMuchUpdate; i++){
+        let whichIndexUpdate = parseInt(Math.random() * 999);
+        stocks[whichIndexUpdate].price = Math.random() * 20;
       }
       that.setState({
         stocks: stocks
-      })
+      });
       console.info('updating stocks...');
     }, 1000);
-  }
-
-  loadStyle(){
-    return {color: "red"};
   }
 
   render(){
@@ -43,11 +54,7 @@ export class RecordTable extends React.Component {
         <tbody>
           {
             this.state.stocks.map((v, k) => {
-              return <tr key={k}>
-                <th scope="row">{k}</th>
-                <td>{v.stock}</td>
-                <td style={this.loadStyle()} onChange={e => console.info("changed", e)}>{v.price.toFixed(2)}</td>
-              </tr>
+              return <RecordTableRow key={k} row={{k: k, v: v}} />
             })
           }
         </tbody>
